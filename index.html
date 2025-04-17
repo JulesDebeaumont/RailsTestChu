@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Test-O-Sterone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/black.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/highlight/monokai.css"
+    />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <h1>Ceci n'est pas un test</h1>
+        </section>
+
+        <section>
+          <h1>🧪 Les tests</h1>
+          <p>Pourquoi, comment et avec quoi tester ses applications ?</p>
+        </section>
+
+        <section>
+          <section>
+            <h2>Pourquoi écrire des tests ?</h2>
+            <h6>version idéale</h6>
+            <br />
+            <ul>
+              <li>✅ Garantir le bon fonctionnement du code</li>
+              <li>🛠️ Refactorer sans crainte</li>
+              <li>📈 Accélérer le développement long-terme</li>
+              <li>🧘‍♀️ Réduire le stress en production</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Pourquoi écrire des tests ?</h2>
+            <h6>version réalité</h6>
+            <br />
+            <ul>
+              <li>😵‍💫 L'erreur est humaine, on ne pense pas toujours à tout</li>
+              <li>🔞 Les applications sont toujours plus compliquées</li>
+              <li>🧡 Travail en équipe modulaire et solide</li>
+              <li>🐞 Trouver des bugs à l'écriture des tests</li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Types de tests</h2>
+            <br />
+            <ul>
+              <li>
+                <strong>Test unitaire</strong> : teste une seule classe ou
+                méthode
+              </li>
+              <li><strong>Test fonctionnel</strong> : teste un contrôleur</li>
+              <li>
+                <strong>Test d’intégration</strong> : simule l’interaction
+                utilisateur (coté front)
+              </li>
+              <li><strong>Test système</strong> : test de bout en bout</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Types de tests</h2>
+            <h6>version Jules</h6>
+            <br />
+            <ul>
+              <li>
+                <strike
+                  ><strong>Test unitaire</strong> : teste une seule classe ou
+                  méthode</strike
+                >
+              </li>
+              <li><strong>Test fonctionnel</strong> : teste un contrôleur</li>
+              <li>
+                <strike
+                  ><strong>Test d’intégration</strong> : simule l’interaction
+                  utilisateur</strike
+                >
+              </li>
+              <li>
+                <strike
+                  ><strong>Test système</strong> : test de bout en bout</strike
+                >
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h2>Pourquoi ?</h2>
+            <br />
+            <ul>
+              <li>
+                Les controllers englobe tout l'acheminement et la procédure
+                d'une requête jusqu'a sa réponse.
+              </li>
+              <li>Le plus gros ratio Temps / Efficacité (à titre personnel)</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Exemple: '/api/personnes/1'</h2>
+            <br />
+            <ul>
+              <li>Router</li>
+              <li>ApplicationController</li>
+              <li>PersonnesController</li>
+              <li>Policies</li>
+              <li>Logique métier sur le modèle Personne</li>
+              <li>Réponse</li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Anatomie d'un test</h2>
+              <pre>
+                <code class="language-ruby">require "test_helper"
+  
+class PersonnesControllerTest < ActionDispatch::IntegrationTest
+
+  test "test exemple" do
+    get("/api/personnes/profils")
+    assert_response :unauthorized
+  end
+
+end</code>
+              </pre>
+          </section>
+
+          <section>
+            <h2>Anatomie d'un test</h2>
+            <h6>Les asserts</h6>
+            <br />
+            <ul>
+              <li><code>assert</code> : vérifie qu'une condition est vraie</li>
+              <li><code>assert_equal</code> : compare deux valeurs</li>
+              <li><code>assert_nil</code> : vérifie qu’une valeur est <code>nil</code></li>
+              <li><b><code>assert_response</code> : vérifie la réponse d'une requête</b></li>
+            </ul>
+          </section>
+          
+          <section>
+            <h2>Anatomie d'un test</h2>
+            <h6>Le callback setup</h6>
+            <ul>
+              <li>S'exécute avant chaque test</li>
+              <li>Idéal pour la préparation des objets</li>
+              <li>Chaque test reste isolé : nouvelle instance à chaque fois</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Anatomie d'un test</h2>
+            <h6>Les callbacks</h6>
+            <pre>
+              <code class="language-ruby">require "test_helper"
+
+class PersonnesControllerTest < ActionDispatch::IntegrationTest
+
+setup do
+  @personne = Personne.find(...)
+end
+
+# les tests auront accès à @personne
+
+end</code>
+            </pre>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>🔧 Les fixtures</h2>
+            <ul>
+              <li>📁 Fichiers YML utilisés pour peupler la base de test</li>
+              <li>📦 Fournissent des données prêtes à l’emploi dans les tests</li>
+              <li>🔄 Chargés automatiquement avant chaque test</li>
+            </ul>
+          </section>
+          
+          <section>
+            <h3>Exemple de fixture (users.yml)</h3>
+            <pre><code class="language-yaml">user_admin:
+  nom_complet: "User Admin"
+  courriel: "testadmin@chu-reims.fr"
+  windows: "0000001"
+  id_res: "0000001"
+  is_admin: true
+
+user_standard:
+  nom_complet: "User Standard"
+  courriel: "teststandard@chu-reims.fr"
+  windows: "0000002"
+  id_res: "0000002"
+  is_admin: false</code></pre>
+          </section>
+          
+          <section>
+            <h3>Utilisation dans les tests</h3>
+            <pre><code class="language-ruby">test "show user exemple" do
+  user = users(:user_standard)
+
+  # Sans JWT
+  get("/api/users/#{user.id}")
+  assert_response :unauthorized
+end</code></pre>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>💉 Les helpers, c'est quoi ?</h2>
+            <br />
+            <div>Classes mettant à disposition des méthodes utilitaires dans les tests</div>
+          </section>
+
+          <section>
+            <h2>💉 Helpers</h2>
+            <h6>Utilisation courante</h6>
+            <br />
+            <ul>
+              <li>Génération de JWT pour un <i>faux</i> utilisateur</li>
+              <li>Modification et réinitialisation des droits utilisateur sur demande</li>
+              <li>Gestionnaire de fichiers</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>💉 Exemple</h2>
+            <pre>
+              <code class=language-ruby>module AuthHelper
+  def get_jwt_admin
+    get_jwt(users(:user_admin))
+  end
+  
+  private
+  def get_jwt(user)
+    payload = {sub: user.windows, aud: nil, iat: Time.now.to_i, exp: iat + 8.hours.to_i, id_res: user.id_res}
+    secret = Rails.application.credentials.jwt_secret
+    { Authorization: JWT.encode(payload, secret, 'HS256') }
+  end
+end</code></pre>
+          </section>
+
+          <section>
+            <h2>💉 Exemple</h2>
+            <pre>
+              <code class=language-ruby>require "test_helper"
+require "test_helpers/auth_helper"
+
+class AdminControllerTest < ActionDispatch::IntegrationTest
+  include AuthHelper
+
+  test "exemple" do
+    post("/api/admin/import-truc", headers: get_jwt_admin)
+    assert_response :success
+  end
+
+end</code></pre>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>🖥️ CLI</h2>
+            <ul>
+              <li><code>bin/rails test</code> : exécute tous les tests</li>
+              <li><code>bin/rails test test/models/user_test.rb</code> : un fichier spécifique</li>
+              <li><code>bin/rails test -n test_nom_du_test</code> : un test précis par nom</li>
+              <li><code>bin/rails test:controllers</code> : une catégorie de tests</li>
+            </ul>
+          </section>
+          
+          <section>
+            <h3>🖥️ CLI</h3>
+            <ul>
+              <li>Ajouter <code>--verbose</code> pour plus de détails</li>
+              <li>Utiliser <code>--fail-fast</code> pour s'arrêter au 1er échec</li>
+              <li>Utiliser <code>--pride</code> pour faire la 🎉</li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+          <h2>Bonnes pratiques</h2>
+          <ul>
+            <li>🔁 Exécuter les tests automatiquement (CI/CD)</li>
+            <li>💬 Nommer clairement les tests</li>
+            <li>📏 Garder les tests rapides</li>
+            <li>🔍 Ne pas tester les implémentations mais les comportements</li>
+            <li>❗️ Tester toutes les possibilitées</li>
+          </ul>
+        </section>
+
+
+
+        <section>
+          <h2>Conclusion</h2>
+          <p></p>
+          <p>Les tests, ça déchire.</p>
+          <p><a href="https://guides.rubyonrails.org/testing.html">Documentation</a></p>
+        </section>
+
+        <section>
+          <h2>Bonus</h2>
+          <pre># Running:
+.............
+Finished in 1.230508s, 12.9880 runs/s, 41.0881 assertions/s.
+13 runs, 14 assertions, 1 failures, 0 errors, 0 skips
+
+Failure: Faute à "<i>Tester toutes les possibilité<b><u>e</u></b>s</i>"</pre>
+        </section>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/highlight/highlight.min.js"></script>
+    <script>
+      Reveal.initialize({
+        hash: true,
+        slideNumber: true,
+        plugins: [RevealHighlight],
+      });
+    </script>
+  </body>
+</html>
